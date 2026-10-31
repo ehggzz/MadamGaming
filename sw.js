@@ -1,4 +1,4 @@
-const CACHE='madamgaming-v6';
+const CACHE='madamgaming-v7';
 const ASSETS=['./','./index.html','./styles.css','./game.js','./melody-hop.js','./manifest.json','./icons/icon.svg','./characters/magpie.svg','./characters/easter-egg.svg','./characters/pumpkin.svg','./characters/skull.svg','./characters/frog.svg'];
 
 self.addEventListener('install',event=>{
