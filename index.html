@@ -24,6 +24,15 @@
       <button class="back" data-screen="home">← Back</button>
       <h2>Choose your friend</h2>
       <div id="characterGrid" class="character-grid"></div>
+
+      <button id="difficultyToggle" class="secondary settings-button" type="button">⚙️ Difficulty: <strong id="difficultyName">Easy</strong></button>
+      <div id="difficultyPanel" class="difficulty-panel" hidden>
+        <p class="difficulty-title">How tricky should it be?</p>
+        <button class="difficulty-choice selected" data-difficulty="easy" type="button"><span>🌱</span><span><strong>Easy</strong><small>Slow and roomy — perfect for little players.</small></span></button>
+        <button class="difficulty-choice" data-difficulty="normal" type="button"><span>⭐</span><span><strong>Normal</strong><small>A little faster with smaller gaps.</small></span></button>
+        <button class="difficulty-choice" data-difficulty="hard" type="button"><span>🔥</span><span><strong>Hard</strong><small>Fast and challenging!</small></span></button>
+      </div>
+
       <button id="startGame" class="primary" disabled>Play! 🪽</button>
     </section>
 
