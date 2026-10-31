@@ -16,6 +16,7 @@
       <div class="brand"><span>✨</span><h1>MadamGaming</h1><span>✨</span></div>
       <p class="subtitle">Pick a game and have fun!</p>
       <button class="game-card" id="playFlap"><span class="big-icon">🪽</span><span><strong>Flappy Friends</strong><small>Tap to fly!</small></span><span class="arrow">›</span></button>
+      <button class="game-card" id="playMelody"><span class="big-icon">🎵</span><span><strong>Melody Hop</strong><small>Hop to the music!</small></span><span class="arrow">›</span></button>
       <div class="coming">More games coming soon! 💕</div>
       <p class="offline-note">📱 Works offline once installed</p>
     </section>
@@ -42,6 +43,25 @@
       <div id="tapHint" class="tap-hint">TAP TO FLY!</div>
     </section>
 
+    <section id="melodyGame" class="screen game-screen melody-screen">
+      <div class="hud"><button class="small-btn" id="quitMelody">✕</button><div>🎵 <span id="melodyScore">0</span></div><div>🏆 <span id="melodyBest">0</span></div></div>
+      <canvas id="melodyCanvas" aria-label="Melody Hop game"></canvas>
+      <div id="melodyHint" class="melody-hint">SWIPE TO CHOOSE A PLATFORM!</div>
+      <div class="lane-controls"><button id="laneLeft" aria-label="Move left">◀</button><button id="laneRight" aria-label="Move right">▶</button></div>
+    </section>
+
+    <section id="melodyOver" class="screen overlay-screen">
+      <div class="result-card">
+        <img id="melodyResultCharacter" class="result-character" src="characters/frog.svg" alt="Frog">
+        <h2>Lovely hopping! 🎶</h2>
+        <p>Platforms: <strong id="melodyFinalScore">0</strong></p>
+        <p id="melodyNewBest" class="new-best" hidden>🎉 New best score!</p>
+        <button id="melodyAgain" class="primary">Play again</button>
+        <button id="melodyChange" class="secondary">Change friend</button>
+        <button id="melodyHome" class="text-btn">Home</button>
+      </div>
+    </section>
+
     <section id="gameOver" class="screen overlay-screen">
       <div class="result-card">
         <img id="resultCharacter" class="result-character" src="characters/magpie.svg" alt="Magpie">
@@ -54,6 +74,7 @@
       </div>
     </section>
   </main>
+  <script src="melody-hop.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
