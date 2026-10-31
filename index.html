@@ -25,7 +25,6 @@
       <button class="back" data-screen="home">← Back</button>
       <h2>Choose your friend</h2>
       <div id="characterGrid" class="character-grid"></div>
-
       <button id="difficultyToggle" class="secondary settings-button" type="button">⚙️ Difficulty: <strong id="difficultyName">Easy</strong></button>
       <div id="difficultyPanel" class="difficulty-panel" hidden>
         <p class="difficulty-title">How tricky should it be?</p>
@@ -33,7 +32,6 @@
         <button class="difficulty-choice" data-difficulty="normal" type="button"><span>⭐</span><span><strong>Normal</strong><small>A little faster with smaller gaps.</small></span></button>
         <button class="difficulty-choice" data-difficulty="hard" type="button"><span>🔥</span><span><strong>Hard</strong><small>Fast and challenging!</small></span></button>
       </div>
-
       <button id="startGame" class="primary" disabled>Play! 🪽</button>
     </section>
 
@@ -53,28 +51,20 @@
     <section id="melodyOver" class="screen overlay-screen">
       <div class="result-card">
         <img id="melodyResultCharacter" class="result-character" src="characters/frog.svg" alt="Frog">
-        <h2>Lovely hopping! 🎶</h2>
-        <p>Platforms: <strong id="melodyFinalScore">0</strong></p>
-        <p id="melodyNewBest" class="new-best" hidden>🎉 New best score!</p>
-        <button id="melodyAgain" class="primary">Play again</button>
-        <button id="melodyChange" class="secondary">Change friend</button>
-        <button id="melodyHome" class="text-btn">Home</button>
+        <h2>Lovely hopping! 🎶</h2><p>Platforms: <strong id="melodyFinalScore">0</strong></p><p id="melodyNewBest" class="new-best" hidden>🎉 New best score!</p>
+        <button id="melodyAgain" class="primary">Play again</button><button id="melodyChange" class="secondary">Change friend</button><button id="melodyHome" class="text-btn">Home</button>
       </div>
     </section>
 
     <section id="gameOver" class="screen overlay-screen">
       <div class="result-card">
         <img id="resultCharacter" class="result-character" src="characters/magpie.svg" alt="Magpie">
-        <h2>Bonk! 💫</h2>
-        <p>Score: <strong id="finalScore">0</strong></p>
-        <p id="newBest" class="new-best" hidden>🎉 New best score!</p>
-        <button id="again" class="primary">Try again</button>
-        <button id="changeCharacter" class="secondary">Change friend</button>
-        <button id="homeButton" class="text-btn">Home</button>
+        <h2>Bonk! 💫</h2><p>Score: <strong id="finalScore">0</strong></p><p id="newBest" class="new-best" hidden>🎉 New best score!</p>
+        <button id="again" class="primary">Try again</button><button id="changeCharacter" class="secondary">Change friend</button><button id="homeButton" class="text-btn">Home</button>
       </div>
     </section>
   </main>
-  <script src="melody-hop.js"></script>
+  <script src="melody-hop.js?v=9"></script>
   <script src="game.js"></script>
 </body>
 </html>
