@@ -1,5 +1,5 @@
 const characters=[{id:'magpie',name:'Magpie',emoji:'🐦'},{id:'egg',name:'Easter Egg',emoji:'🥚'},{id:'pumpkin',name:'Pumpkin',emoji:'🎃'},{id:'skull',name:'Skull',emoji:'💀'}];
-const difficulties={easy:{name:'Easy',gravity:.28,flap:-6,speed:2.15,gap:210,spawn:135},normal:{name:'Normal',gravity:.38,flap:-7.2,speed:3.2,gap:150,spawn:105},hard:{name:'Hard',gravity:.46,flap:-8,speed:4.1,gap:125,spawn:82}};
+const difficulties={easy:{name:'Easy',gravity:.28,flap:-6,speed:2.15,gap:270,spawn:135},normal:{name:'Normal',gravity:.38,flap:-7.2,speed:3.2,gap:150,spawn:105},hard:{name:'Hard',gravity:.46,flap:-8,speed:4.1,gap:125,spawn:82}};
 const $=id=>document.getElementById(id);const screens=['home','characters','game','gameOver'];let selected=null;let difficulty='easy';
 function show(id){screens.forEach(s=>$(s).classList.toggle('active',s===id));}
 const grid=$('characterGrid');characters.forEach(c=>{const b=document.createElement('button');b.className='character';b.innerHTML=`<span class="emoji">${c.emoji}</span><span>${c.name}</span>`;b.onclick=()=>{selected=c;b.classList.add('selected');[...grid.children].filter(x=>x!==b).forEach(x=>x.classList.remove('selected'));$('startGame').disabled=false};grid.appendChild(b)});
