@@ -1,5 +1,5 @@
-const CACHE='madamgaming-v2';
-const ASSETS=['./','./index.html','./styles.css','./game.js','./manifest.json','./icons/icon.svg'];
+const CACHE='madamgaming-v3';
+const ASSETS=['./','./index.html','./styles.css','./game.js','./manifest.json','./icons/icon.svg','./characters/magpie.svg','./characters/easter-egg.svg','./characters/pumpkin.svg','./characters/skull.svg','./characters/frog.svg'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(
