@@ -1,4 +1,4 @@
-const CACHE='madamgaming-v17';
+const CACHE='madamgaming-v18';
 const ASSETS=['./','./index.html','./styles.css','./game.js','./melody-hop-v2.js','./number-garden.js','./manifest.json','./icons/icon.svg','./characters/magpie.svg','./characters/easter-egg.svg','./characters/pumpkin.svg','./characters/skull.svg','./characters/frog.svg','./characters/frankenstein.svg','./characters/rabbit.svg','./characters/bat.svg'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('madamgaming-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()).then(()=>self.clients.matchAll({type:'window'})).then(clients=>clients.forEach(client=>client.navigate(client.url).catch(()=>{}))))});
