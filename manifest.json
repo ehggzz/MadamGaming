@@ -1,0 +1,10 @@
+{
+  "name":"MadamGaming",
+  "short_name":"MadamGaming",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#101814",
+  "theme_color":"#101814",
+  "description":"A little collection of offline games.",
+  "icons":[{"src":"icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
