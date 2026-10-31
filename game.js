@@ -4,7 +4,9 @@ const characters=[
   {id:'pumpkin',name:'Pumpkin',src:'characters/pumpkin.svg'},
   {id:'skull',name:'Skull',src:'characters/skull.svg'},
   {id:'frog',name:'Frog',src:'characters/frog.svg'},
-  {id:'frankenstein',name:'Frankenstein',src:'characters/frankenstein.svg'}
+  {id:'frankenstein',name:'Frankenstein',src:'characters/frankenstein.svg'},
+  {id:'rabbit',name:'Rabbit',src:'characters/rabbit.svg'},
+  {id:'bat',name:'Bat',src:'characters/bat.svg'}
 ];
 characters.forEach(c=>{c.image=new Image();c.image.src=c.src});
 const difficulties={easy:{name:'Easy',gravity:.28,flap:-6,speed:2.15,gap:270,spawn:135},medium:{name:'Medium',gravity:.38,flap:-7.2,speed:3.2,gap:150,spawn:105},hard:{name:'Hard',gravity:.46,flap:-8,speed:4.1,gap:125,spawn:82}};
