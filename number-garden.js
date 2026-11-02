@@ -17,10 +17,6 @@
     const garden=$('numberGarden');
     garden.innerHTML='';
     garden.classList.add('counting-layout');
-
-    // Every round gets a fresh set of shuffled positions, so the answer
-    // cannot be recognised from the icons' familiar formation.
-    const columns=4;
     const cellCount=difficulty==='easy'?12:difficulty==='medium'?16:20;
     const cells=shuffle(Array.from({length:cellCount},(_,i)=>i)).slice(0,target);
     for(let i=0;i<target;i++){
@@ -28,11 +24,9 @@
       item.className='garden-item';
       item.textContent=['🌸','🌼','🌻','🍎','🍓','🌷','🪻'][Math.floor(Math.random()*7)];
       item.style.setProperty('--r',`${(Math.random()*16-8).toFixed(1)}deg`);
-      item.style.gridColumn=String((cells[i]%columns)+1);
-      item.style.gridRow=String(Math.floor(cells[i]/columns)+1);
+      item.style.setProperty('--cell',cells[i]);
       garden.appendChild(item);
     }
-
     const answer=$('numberAnswers');answer.innerHTML='';
     choices.forEach(n=>{
       const b=document.createElement('button');b.className='number-answer';b.textContent=n;
@@ -61,7 +55,8 @@
     $('numberFinalScore').textContent=`${score}/${total}`;
     $('numberResultCharacter').src=character.src;$('numberResultCharacter').alt=character.name;
     $('numberNewBest').hidden=!wasBest;
-    $('numberGardenScreen').classList.remove('active');$('numberGardenOver').classList.add('active');
+    if(window.celebrateThen)window.celebrateThen(()=>{$('numberGardenScreen').classList.remove('active');$('numberGardenOver').classList.add('active')});
+    else{$('numberGardenScreen').classList.remove('active');$('numberGardenOver').classList.add('active')}
   }
   window.startNumberGarden=startNumberGarden;
   window.stopNumberGarden=()=>{active=false};
