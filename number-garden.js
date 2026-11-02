@@ -18,8 +18,9 @@
     garden.innerHTML='';
     garden.classList.add('counting-layout');
 
-    // Give every round a fresh, shuffled set of positions so she cannot
-    // learn the answer from the shape or location of the icons.
+    // Every round gets a fresh set of shuffled positions, so the answer
+    // cannot be recognised from the icons' familiar formation.
+    const columns=4;
     const cellCount=difficulty==='easy'?12:difficulty==='medium'?16:20;
     const cells=shuffle(Array.from({length:cellCount},(_,i)=>i)).slice(0,target);
     for(let i=0;i<target;i++){
@@ -27,7 +28,8 @@
       item.className='garden-item';
       item.textContent=['🌸','🌼','🌻','🍎','🍓','🌷','🪻'][Math.floor(Math.random()*7)];
       item.style.setProperty('--r',`${(Math.random()*16-8).toFixed(1)}deg`);
-      item.style.setProperty('--cell',cells[i]);
+      item.style.gridColumn=String((cells[i]%columns)+1);
+      item.style.gridRow=String(Math.floor(cells[i]/columns)+1);
       garden.appendChild(item);
     }
 
