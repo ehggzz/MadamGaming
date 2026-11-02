@@ -1,0 +1,26 @@
+name: Build PWA icon
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'icons/rainbow-n.svg'
+      - '.github/workflows/build-pwa-icon.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  icon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Convert rainbow N SVG to PNG
+        run: convert -background none icons/rainbow-n.svg -resize 192x192 icons/rainbow-n.png
+      - name: Commit PNG icon
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add icons/rainbow-n.png
+          git diff --cached --quiet || git commit -m "Build PNG rainbow N PWA icon"
+          git push
