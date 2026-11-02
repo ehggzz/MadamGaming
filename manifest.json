@@ -6,5 +6,5 @@
   "background_color":"#101814",
   "theme_color":"#101814",
   "description":"A little collection of offline games.",
-  "icons":[{"src":"icons/rainbow-n.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "icons":[{"src":"icons/rainbow-n.png","sizes":"192x192","type":"image/png","purpose":"any maskable"}]
 }
