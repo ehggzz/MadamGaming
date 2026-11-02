@@ -1,4 +1,4 @@
-const CACHE='madamgaming-v37';
+const CACHE='madamgaming-v38';
 const ASSETS=['./','./index.html','./styles.css','./celebration.css','./game.js','./game.js?v=22','./melody-hop-v2.js','./melody-hop-v2.js?v=16','./number-garden.js','./number-garden.js?v=17','./manifest.json','./icons/icon.svg','./spelling-friends.js','./spelling-friends.js?v=1','./spelling-fix.js','./spelling-fix.js?v=2','./spelling-fix.js?v=3','./adult-games.js','./adult-games.js?v=1','./solitaire-fix.js','./solitaire-fix.js?v=1','./chess-ai.js','./chess-ai.js?v=1','./pacman-maze.js','./pacman-maze.js?v=8','./characters/magpie.svg','./characters/easter-egg.svg','./characters/pumpkin.svg','./characters/skull.svg','./characters/frog.svg','./characters/frankenstein.svg','./characters/rabbit.svg','./characters/bat.svg'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('madamgaming-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
