@@ -24,3 +24,5 @@ jobs:
           git add icons/rainbow-n.png
           git diff --cached --quiet || git commit -m "Build PNG rainbow N PWA icon"
           git push
+
+# Re-run icon build when the workflow itself changes.
