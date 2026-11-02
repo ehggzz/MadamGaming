@@ -14,14 +14,23 @@
     $('numberRound').textContent=`${round}/${total}`;
     $('numberCharacter').src=character.src;
     $('numberCharacter').alt=character.name;
-    const garden=$('numberGarden');garden.innerHTML='';
+    const garden=$('numberGarden');
+    garden.innerHTML='';
+    garden.classList.add('counting-layout');
+
+    // Give every round a fresh, shuffled set of positions so she cannot
+    // learn the answer from the shape or location of the icons.
+    const cellCount=difficulty==='easy'?12:difficulty==='medium'?16:20;
+    const cells=shuffle(Array.from({length:cellCount},(_,i)=>i)).slice(0,target);
     for(let i=0;i<target;i++){
       const item=document.createElement('span');
       item.className='garden-item';
-      item.textContent=['🌸','🌼','🌻','🍎','🍓'][Math.floor(Math.random()*5)];
-      item.style.setProperty('--r',`${(Math.random()*8-4).toFixed(1)}deg`);
+      item.textContent=['🌸','🌼','🌻','🍎','🍓','🌷','🪻'][Math.floor(Math.random()*7)];
+      item.style.setProperty('--r',`${(Math.random()*16-8).toFixed(1)}deg`);
+      item.style.setProperty('--cell',cells[i]);
       garden.appendChild(item);
     }
+
     const answer=$('numberAnswers');answer.innerHTML='';
     choices.forEach(n=>{
       const b=document.createElement('button');b.className='number-answer';b.textContent=n;
