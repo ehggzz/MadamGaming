@@ -67,15 +67,60 @@ function playShop(){const goods=[['🍎',2],['🍌',1],['🍓',3],['🥕',2],['�
 const letters=[['A','🍎','Apple'],['B','⚽','Ball'],['C','🐱','Cat'],['D','🐶','Dog'],['F','🐸','Frog'],['M','🌙','Moon'],['S','☀️','Sun'],['T','🐢','Turtle']];
 function playLetter(){const l=letters[(round+Math.floor(Math.random()*letters.length))%letters.length];$('mgWorldInstruction').textContent='Which letter does '+l[2]+' start with?';$('mgWorldBoard').appendChild(el('div','mg-world-art',l[1]));shuffle([l[0],'B','S','M','T','A'].filter((v,i,a)=>a.indexOf(v)===i)).forEach(x=>choice(x,'Letter '+x,()=>{if(x===l[0]){score++;feedback.textContent='Letter champion! 🔤';round++;setTimeout(next,650)}else feedback.textContent='Say the word slowly and listen!'}))}
 function playMelodyAdventure(){const paths=['🌳','🌼','🍄','🌈','⭐'];const correct=(round%3);$('mgWorldInstruction').textContent='Choose the glowing stepping stone to help your friend cross!';$('mgWorldBoard').appendChild(el('div','mg-world-art','🐸  ➜  🌉'));paths.slice(0,3).forEach((p,i)=>choice(p,i===correct?'Safe path':'',()=>{if(i===correct){score++;feedback.textContent='Boing! Perfect landing! 🎵';round++;setTimeout(next,650)}else feedback.textContent='Try another stepping stone!'}))}
-function playPuzzle(){const sets=[['🐸','🌿','☀️'],['🐰','🥕','🌼'],['🐦','🌳','☁️'],['🦖','🌋','🌴'],['🦋','🌸','🌈']];const pic=sets[round%sets.length];$('mgWorldInstruction').textContent='Put the picture pieces in the right order: first, middle, last.';const slots=[];for(let i=0;i<3;i++){const b=choice('⬜','Piece '+(i+1),()=>{if(b.dataset.filled)return;const x=pic[slots.length];b.innerHTML='<span>'+x+'</span><small>Piece '+(i+1)+'</small>';b.dataset.filled='1';slots.push(x);if(slots.length===3){if(slots.join('')===pic.join('')){score++;feedback.textContent='Picture complete! 🧩';round++;setTimeout(next,700)}else{feedback.textContent='Let’s try that puzzle again!';setTimeout(()=>playPuzzle(),800)}}})}const note=el('p','mg-world-note','Tap the three pieces in order to complete the picture.');footer.appendChild(note)}
+function playPuzzle(){
+ const sets=[['🐸','🌿','☀️','Frog in the garden'],['🐰','🥕','🌼','Bunny finds a carrot'],['🐦','🌳','☁️','Bird in the tree'],['🦖','🌋','🌴','Dinosaur island'],['🦋','🌸','🌈','Butterfly garden']];
+ const pic=sets[round%sets.length];
+ $('mgWorldInstruction').textContent='Build the picture! Tap the three picture pieces in the order shown: 1, then 2, then 3.';
+ board.appendChild(el('div','mg-world-art',pic.slice(0,3).join('  ')));
+ const progress=el('div','mg-world-note','Your picture: ① ② ③');footer.appendChild(progress);
+ const pieces=shuffle(pic.slice(0,3).map((emoji,i)=>({emoji,number:i+1})));
+ const chosen=[];
+ pieces.forEach(piece=>choice(piece.emoji,'Piece '+piece.number,()=>{
+   if(chosen.some(x=>x.number===piece.number))return;
+   if(piece.number!==chosen.length+1){feedback.textContent='Look for piece '+(chosen.length+1)+' next!';return}
+   chosen.push(piece);feedback.textContent='Piece '+piece.number+' fits! 🧩';
+   progress.textContent='Your picture: '+chosen.map(x=>x.emoji).join('  ')+'  '+ '⬜'.repeat(3-chosen.length);
+   if(chosen.length===3){score++;feedback.textContent=pic[3]+' — you did it! 🎉';round++;setTimeout(next,900)}
+ }));
+}
 function playTreasure(){const n=round+2+(Math.floor(Math.random()*3));$('mgWorldInstruction').textContent='How many sparkling gems did you find?';$('mgWorldBoard').appendChild(el('div','mg-world-art','💎'.repeat(n)));shuffle([n,n-1,n+1,n+2]).forEach(x=>choice('💰',String(x),()=>{if(x===n){score++;feedback.textContent='Treasure found! 💎';round++;setTimeout(next,650)}else feedback.textContent='Count each gem carefully!'}))}
 function playDrawing(){ $('mgWorldInstruction').textContent='Draw anything you like! Pick a colour and make a masterpiece.';const c=document.createElement('canvas');c.className='mg-world-canvas';c.width=900;c.height=550;canvas=c;ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);board.appendChild(c);const tools=el('div','mg-world-tools');['#e64b4b','#2878e8','#25a86b','#f4b82c','#8a4bc4','#202020'].forEach(col=>{const b=el('button','', '●');b.style.color=col;b.onclick=()=>{drawColour=col;tools.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active')};tools.appendChild(b)});footer.appendChild(tools);const clear=el('button','mg-world-action mg-world-secondary','Clear picture');clear.onclick=()=>{ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height)};const done=el('button','mg-world-action','I finished! 🌟');done.onclick=()=>{score=5;round=5;next()};footer.append(clear,done);const pos=e=>{const r=c.getBoundingClientRect();return[(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]};c.onpointerdown=e=>{drawing=true;c.setPointerCapture(e.pointerId);const [x,y]=pos(e);ctx.beginPath();ctx.moveTo(x,y)};c.onpointermove=e=>{if(!drawing)return;const[x,y]=pos(e);ctx.strokeStyle=drawColour;ctx.lineWidth=drawSize;ctx.lineCap='round';ctx.lineTo(x,y);ctx.stroke()};c.onpointerup=()=>drawing=false;c.onpointercancel=()=>drawing=false}
-function playBuild(){ $('mgWorldInstruction').textContent='Tap the things you want to add to your world. Make it your own!';const scene=el('div','mg-world-scene','');scene.style.flex='1';board.appendChild(scene);const items=['🌳','🏡','🌸','☁️','☀️','🐸','🐰','🌈','🦋','🏔️','🌻','🚂'];items.forEach(x=>choice(x,'Add',()=>{scene.textContent+=x;worldItems.push(x)}));const done=el('button','mg-world-action','My world is ready! 🌍');done.onclick=()=>{score=5;round=5;next()};footer.appendChild(done)}
-function playCreator(){ $('mgWorldInstruction').textContent='Choose a friend and decorate them with a silly accessory!';const preview=el('div','mg-world-art',characters[creatorChar][0]+' '+creatorHat);board.appendChild(preview);characters.forEach((c,i)=>choice(c[0],c[1],()=>{creatorChar=i;preview.textContent=c[0]+' '+creatorHat}));['👑','🎀','🕶️','🌼','🎩','✨'].forEach(h=>choice(h,'Accessory',()=>{creatorHat=h;preview.textContent=characters[creatorChar][0]+' '+h}));const done=el('button','mg-world-action','My character is ready!');done.onclick=()=>{score=5;round=5;next()};footer.appendChild(done)}
+function playBuild(){
+ $('mgWorldInstruction').textContent='Let’s make a little garden! Tap an item below to place it in your picture. You can add as many as you like.';
+ const scene=el('div','mg-world-scene','');scene.style.flex='1';scene.style.minHeight='190px';scene.textContent='🌤️  Your garden  🌱';board.appendChild(scene);
+ const groups=[['🌳','🌸','🌻','🌷','🌿'],['🐸','🐰','🦋','🐦','🐞'],['🏡','🏔️','🌈','☁️','☀️']];
+ const labels=['Plants','Friends','World'];
+ groups.forEach((group,index)=>{const label=el('p','mg-world-note',['🌱 Plants','🐾 Friends','🏡 World'][index]);footer.appendChild(label);const row=el('div','mg-world-tools');group.forEach(item=>{const b=el('button','',item);b.setAttribute('aria-label','Add '+item);b.onclick=()=>{const piece=el('span','',item);piece.style.fontSize='38px';scene.appendChild(piece);worldItems.push(item);feedback.textContent='Added '+item+' to your garden!'};row.appendChild(b)});footer.appendChild(row)});
+ const undo=el('button','mg-world-action mg-world-secondary','Undo last item');undo.onclick=()=>{if(scene.lastElementChild&&scene.lastElementChild.tagName==='SPAN'){scene.lastElementChild.remove();worldItems.pop()}};const done=el('button','mg-world-action','My garden is finished! 🌍');done.onclick=()=>{feedback.textContent='What a lovely garden!';score=5;round=5;setTimeout(next,500)};footer.append(undo,done)
+}
+function playCreator(){
+ let stage=0;
+ const accessories=['👑','🎀','🕶️','🌼','🎩','✨'];
+ const preview=el('div','mg-world-art',characters[creatorChar][0]+' '+creatorHat);board.appendChild(preview);
+ function render(){
+   board.innerHTML='';board.appendChild(preview);
+   $('mgWorldInstruction').textContent=stage===0?'Step 1: Choose your character friend.': 'Step 2: Choose something to dress them up with!';
+   if(stage===0){characters.forEach((c,i)=>choice(c[0],c[1],()=>{creatorChar=i;preview.textContent=c[0]+' '+creatorHat;stage=1;render()}))}
+   else {accessories.forEach(h=>choice(h,'Add this',()=>{creatorHat=h;preview.textContent=characters[creatorChar][0]+' '+h;feedback.textContent='Looking fabulous!';}));const back=el('button','mg-world-action mg-world-secondary','Choose a different friend');back.onclick=()=>{stage=0;render()};footer.appendChild(back)}
+ }
+ render();const done=el('button','mg-world-action','That’s my character! 🎉');done.onclick=()=>{feedback.textContent='Your new friend is ready!';score=5;round=5;setTimeout(next,500)};footer.appendChild(done)
+}
 function playDino(){const fossil=['🦴','🦕','🦖','🥚','🦷'][round%5];let taps=0;$('mgWorldInstruction').textContent='Tap the sandy patches to dig for dinosaur treasure!';for(let i=0;i<9;i++){const b=choice(['🟫','🟤','🟫'][i%3],'Dig',()=>{if(b.dataset.dug)return;b.dataset.dug='1';b.textContent='🕳️';taps++;if(taps>=3){b.textContent=fossil;score++;feedback.textContent='You found a fossil! 🦖';round++;setTimeout(next,800)}})}}
 function playWeather(){const wx=[['☀️','Sunny','🌻'],['🌧️','Rainy','☂️'],['❄️','Snowy','⛄'],['🌬️','Windy','🍃'],['⛈️','Stormy','⚡'],['🌈','Rainbow','🌈']];const w=wx[round%wx.length];$('mgWorldInstruction').textContent='Which weather would help '+w[2]+'?';$('mgWorldBoard').appendChild(el('div','mg-world-art',w[2]));shuffle(wx).forEach(x=>choice(x[0],x[1],()=>{if(x[1]===w[1]){score++;feedback.textContent='Weather wizard! 🌦️';round++;setTimeout(next,650)}else feedback.textContent='Look at the clue!'}))}
 const recipes=[['🍓','🥣','🥄','🥛'],['🍞','🧀','🍅','🥪'],['🍌','🥛','🍯','🥤'],['🥕','🥔','🥣','🍲'],['🍎','🥣','🍯','🥧']];
-function playChef(){const r=recipes[round%recipes.length];$('mgWorldInstruction').textContent='Tap the ingredients in order to prepare the recipe!';const tray=shuffle(r);const order=[];tray.forEach(x=>choice(x,'Ingredient',()=>{if(order.includes(x))return;order.push(x);if(order.length===r.length){if(order.join('')===r.join('')){score++;feedback.textContent='Delicious! Great cooking! 👩‍🍳';round++;setTimeout(next,750)}else{feedback.textContent='Oops! Let’s start that recipe again.';setTimeout(()=>playChef(),800)}}}))}
+function playChef(){
+ const r=recipes[round%recipes.length],names={ '🍓':'strawberry','🥣':'bowl','🥄':'spoon','🥛':'milk','🍞':'bread','🧀':'cheese','🍅':'tomato','🥪':'sandwich','🍌':'banana','🍯':'honey','🥤':'cup','🥕':'carrot','🥔':'potato','🍲':'soup','🍎':'apple','🥧':'pie'};
+ let step=0;const tray=shuffle(r);const bowl=el('div','mg-world-art','🥣');board.appendChild(bowl);
+ const instruction=el('p','mg-world-note','');footer.appendChild(instruction);
+ const update=()=>{instruction.textContent='Step '+(step+1)+' of '+r.length+': Find the '+(names[r[step]]||'ingredient')+' '+r[step];};
+ $('mgWorldInstruction').textContent='Let’s make a recipe! Follow the steps one at a time. Tap the ingredient shown below.';
+ tray.forEach(x=>choice(x,names[x]||'Ingredient',()=>{
+   if(x!==r[step]){feedback.textContent='Not that one yet — we need '+r[step]+' next!';return}
+   step++;bowl.textContent='🥣 '+r.slice(0,step).join(' ');feedback.textContent='Added '+x+'! 👩‍🍳';
+   if(step===r.length){score++;feedback.textContent='Recipe complete! Delicious work! 🍽️';round++;setTimeout(next,1000)}else update();
+ }));
+ update();
+}
 function playBody(){const parts=[['👀','Eyes','See'],['👂','Ears','Hear'],['👃','Nose','Smell'],['👄','Mouth','Taste and speak'],['🖐️','Hands','Touch'],['🦶','Feet','Walk']];const p=parts[round%parts.length];$('mgWorldInstruction').textContent='Which body part helps us to '+p[2].toLowerCase()+'?';$('mgWorldBoard').appendChild(el('div','mg-world-art','🧍'));shuffle(parts).forEach(x=>choice(x[0],x[1],()=>{if(x[1]===p[1]){score++;feedback.textContent='Body brilliant! 💚';round++;setTimeout(next,650)}else feedback.textContent='Try another body part!'}))}
 function finish(){board.innerHTML='<div class="mg-world-art">🎉🌟🎉</div>';feedback.textContent='You did it! '+score+' stars out of 5!';footer.innerHTML='';const again=el('button','mg-world-action','Play again');again.onclick=()=>{round=0;score=0;next()};const homeBtn=el('button','mg-world-action mg-world-secondary','Back to games');homeBtn.onclick=close;footer.append(again,homeBtn);$('mgWorldProgress').style.width='100%';$('mgWorldRound').textContent='All done!'}
 })();
