@@ -1,24 +1,39 @@
 (()=>{
 const characters=['magpie','easter-egg','pumpkin','skull','frog','frankenstein','rabbit','bat'];
 const names={magpie:'Magpie','easter-egg':'Easter Egg',pumpkin:'Pumpkin',skull:'Skull',frog:'Frog',frankenstein:'Frankenstein',rabbit:'Rabbit',bat:'Bat'};
-const MAZE_LAYOUTS=[
-{ name:'Open Adventure',walls:[['v',5,3,7,[5]],['v',10,13,17,[15]],['h',5,12,17,[14]],['h',15,3,8,[5]]] },
-{ name:'Little Explorer',walls:[['v',4,3,8,[6]],['v',8,12,17,[14]],['v',13,3,8,[5]],['v',17,12,17,[15]],['h',5,4,9,[7]],['h',9,11,16,[13]],['h',15,4,9,[6]]] },
-{ name:'Maze Adventure',walls:[['v',4,3,9,[6]],['v',7,11,17,[14]],['v',10,3,8,[5]],['v',13,12,17,[15]],['v',16,3,9,[7]],['h',5,4,9,[6]],['h',8,11,16,[13]],['h',12,4,9,[7]],['h',15,11,16,[14]],['h',18,5,15,[10]]] }
-];
-let layoutIndex=2;
-let map=buildMaze(0);
-function buildMaze(index){
- const grid=Array.from({length:21},(_,y)=>Array.from({length:21},(_,x)=>(x===0||y===0||x===20||y===20)?'#':'.'));
- const layout=MAZE_LAYOUTS[index%MAZE_LAYOUTS.length];
- layout.walls.forEach(([axis,fixed,start,end,gaps])=>{
-  for(let n=start;n<=end;n++){
-   if(gaps.includes(n))continue;
-   const x=axis==='v'?fixed:n,y=axis==='v'?n:fixed;
-   if((x===1&&y===1)||(x===19&&y===1)||(x===19&&y===19)||(x===1&&y===19))continue;
-   grid[y][x]='#';
-  }
- });
+function buildMaze(){
+ // Randomised depth-first maze generation on a 10 × 10 grid.
+ // Every odd-numbered cell is a room; carving between rooms creates
+ // one fully connected maze with a fresh layout on every new game.
+ const size=10;
+ const grid=Array.from({length:21},()=>Array(21).fill('#'));
+ const visited=Array.from({length:size},()=>Array(size).fill(false));
+ const stack=[{x:0,y:0}];
+ grid[1][1]='.';visited[0][0]=true;
+ while(stack.length){
+  const current=stack[stack.length-1];
+  const options=[[0,-1],[1,0],[0,1],[-1,0]]
+   .map(([dx,dy])=>({x:current.x+dx,y:current.y+dy,dx,dy}))
+   .filter(n=>n.x>=0&&n.x<size&&n.y>=0&&n.y<size&&!visited[n.y][n.x]);
+  if(!options.length){stack.pop();continue;}
+  const next=options[Math.floor(Math.random()*options.length)];
+  visited[next.y][next.x]=true;
+  const x=1+current.x*2,y=1+current.y*2;
+  grid[y+next.dy][x+next.dx]='.';
+  grid[1+next.y*2][1+next.x*2]='.';
+  stack.push({x:next.x,y:next.y});
+ }
+ // Add a handful of random extra passages so routes have alternative paths.
+ const candidates=[];
+ for(let y=1;y<20;y++)for(let x=1;x<20;x++){
+  if(grid[y][x]!=='#')continue;
+  if((x%2===1&&y%2===0&&grid[y-1][x]==='.'&&grid[y+1][x]==='.')||
+     (x%2===0&&y%2===1&&grid[y][x-1]==='.'&&grid[y][x+1]==='.'))candidates.push({x,y});
+ }
+ for(let i=0;i<Math.min(12,Math.floor(candidates.length*.12));i++){
+  const pick=Math.floor(Math.random()*candidates.length);
+  const [wall]=candidates.splice(pick,1);grid[wall.y][wall.x]='.';
+ }
  return grid.map(row=>row.join(''));
 }
 const cell=24;
@@ -45,8 +60,8 @@ canvas.addEventListener('touchstart',e=>{canvas._touch=e.changedTouches[0];e.pre
 // Keep the saved friend selected, but collapse the picker on every fresh game entry.
 hidePicks();
 }
-function reset(){map=buildMaze(layoutIndex);dots=new Set();map.forEach((r,y)=>[...r].forEach((v,x)=>{if(v==='.')dots.add(y+','+x)}));player={x:1,y:1};ghosts=[{x:19,y:1,d:3,char:'pumpkin'},{x:19,y:19,d:2,char:'bat'},{x:1,y:19,d:0,char:'skull'}];score=0;lives=difficulty==='easy'?5:3;dir=nextDir=1;running=false;paused=false;playerClock=ghostClock=0;shield=0;hud();const pause=screen&&screen.querySelector('#mazePause');if(pause)pause.textContent='Pause'}
-function start(){if(endOverlay){endOverlay.remove();endOverlay=null}layoutIndex=(layoutIndex+1)%MAZE_LAYOUTS.length;reset();running=true;last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
+function reset(){map=buildMaze();dots=new Set();map.forEach((r,y)=>[...r].forEach((v,x)=>{if(v==='.')dots.add(y+','+x)}));player={x:1,y:1};ghosts=[{x:19,y:1,d:3,char:'pumpkin'},{x:19,y:19,d:2,char:'bat'},{x:1,y:19,d:0,char:'skull'}];score=0;lives=difficulty==='easy'?5:3;dir=nextDir=1;running=false;paused=false;playerClock=ghostClock=0;shield=0;hud();const pause=screen&&screen.querySelector('#mazePause');if(pause)pause.textContent='Pause'}
+function start(){if(endOverlay){endOverlay.remove();endOverlay=null}reset();running=true;last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
 function stop(){running=false;paused=false;cancelAnimationFrame(raf)}
 function togglePause(){if(!running)return;paused=!paused;screen.querySelector('#mazePause').textContent=paused?'Resume':'Pause';last=performance.now()}
 function loop(t){if(running&&!paused){const dt=Math.min(80,t-last);last=t;update(dt)}draw();if(running)raf=requestAnimationFrame(loop)}
