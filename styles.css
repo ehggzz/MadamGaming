@@ -10,3 +10,6 @@
 @media(max-width:599px){.character-grid{gap:8px}.character{min-height:110px;padding:8px;border-radius:18px;gap:2px}.character .character-art{width:62px;height:62px}.character span:last-child{font-size:14px}.character-screen #startGame{margin-top:12px}}
 
 /* GitHub write access test */
+
+/* Maze Munch: give the maze the available width after a friend is chosen. */
+.maze-screen{padding-left:4px!important;padding-right:4px!important}.maze-wrap{width:100%!important;max-width:760px!important}.maze-stage{width:min(100%,94vw,88dvh,760px)!important}.maze-stage canvas{width:100%;height:auto;aspect-ratio:1}
