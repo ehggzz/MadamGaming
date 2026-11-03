@@ -1,7 +1,26 @@
 (()=>{
 const characters=['magpie','easter-egg','pumpkin','skull','frog','frankenstein','rabbit','bat'];
 const names={magpie:'Magpie','easter-egg':'Easter Egg',pumpkin:'Pumpkin',skull:'Skull',frog:'Frog',frankenstein:'Frankenstein',rabbit:'Rabbit',bat:'Bat'};
-const map=['#####################','#.........#.........#','#.###.###.#.###.###.#','#.#.....#.#.#.....#.#','#.#.###.#.#.#.###.#.#','#...#...#...#...#...#','###.#.#.#####.#.#.###','#...#.#...#...#.#...#','#.###.###.#.###.###.#','#.....#...#...#.....#','#####.#..#.#..#.#####','#.....#...#...#.....#','#.###.###.#.###.###.#','#...#.#...#...#.#...#','###.#.#.#####.#.#.###','#...#...#...#...#...#','#.#.###.#.#.###.#.#.#','#.#.....#.#.....#.#.#','#.###.###.#.###.###.#','#.........#.........#','#####################'];
+const MAZE_LAYOUTS=[
+{ name:'Open Adventure',walls:[['v',5,3,7,[5]],['v',10,13,17,[15]],['h',5,12,17,[14]],['h',15,3,8,[5]]] },
+{ name:'Little Explorer',walls:[['v',4,3,8,[6]],['v',8,12,17,[14]],['v',13,3,8,[5]],['v',17,12,17,[15]],['h',5,4,9,[7]],['h',9,11,16,[13]],['h',15,4,9,[6]]] },
+{ name:'Maze Adventure',walls:[['v',4,3,9,[6]],['v',7,11,17,[14]],['v',10,3,8,[5]],['v',13,12,17,[15]],['v',16,3,9,[7]],['h',5,4,9,[6]],['h',8,11,16,[13]],['h',12,4,9,[7]],['h',15,11,16,[14]],['h',18,5,15,[10]]] }
+];
+let layoutIndex=0;
+let map=buildMaze(0);
+function buildMaze(index){
+ const grid=Array.from({length:21},(_,y)=>Array.from({length:21},(_,x)=>(x===0||y===0||x===20||y===20)?'#':'.'));
+ const layout=MAZE_LAYOUTS[index%MAZE_LAYOUTS.length];
+ layout.walls.forEach(([axis,fixed,start,end,gaps])=>{
+  for(let n=start;n<=end;n++){
+   if(gaps.includes(n))continue;
+   const x=axis==='v'?fixed:n,y=axis==='v'?n:fixed;
+   if((x===1&&y===1)||(x===19&&y===1)||(x===19&&y===19)||(x===1&&y===19))continue;
+   grid[y][x]='#';
+  }
+ });
+ return grid.map(row=>row.join(''));
+}
 const cell=24;
 const levels={easy:{name:'Easy',player:190,ghost:650},medium:{name:'Medium',player:150,ghost:260},hard:{name:'Hard',player:115,ghost:190}};
 const imgs={};characters.forEach(n=>{const i=new Image();i.src='./characters/'+n+'.svg';imgs[n]=i});
@@ -26,8 +45,8 @@ canvas.addEventListener('touchstart',e=>{canvas._touch=e.changedTouches[0];e.pre
 // Keep the saved friend selected, but collapse the picker on every fresh game entry.
 hidePicks();
 }
-function reset(){dots=new Set();map.forEach((r,y)=>[...r].forEach((v,x)=>{if(v==='.')dots.add(y+','+x)}));player={x:1,y:1};ghosts=[{x:19,y:1,d:3,char:'pumpkin'},{x:19,y:19,d:2,char:'bat'},{x:1,y:19,d:0,char:'skull'}];score=0;lives=difficulty==='easy'?5:3;dir=nextDir=1;running=false;paused=false;playerClock=ghostClock=0;shield=0;hud();const pause=screen&&screen.querySelector('#mazePause');if(pause)pause.textContent='Pause'}
-function start(){if(endOverlay){endOverlay.remove();endOverlay=null}reset();running=true;last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
+function reset(){map=buildMaze(layoutIndex);dots=new Set();map.forEach((r,y)=>[...r].forEach((v,x)=>{if(v==='.')dots.add(y+','+x)}));player={x:1,y:1};ghosts=[{x:19,y:1,d:3,char:'pumpkin'},{x:19,y:19,d:2,char:'bat'},{x:1,y:19,d:0,char:'skull'}];score=0;lives=difficulty==='easy'?5:3;dir=nextDir=1;running=false;paused=false;playerClock=ghostClock=0;shield=0;hud();const pause=screen&&screen.querySelector('#mazePause');if(pause)pause.textContent='Pause'}
+function start(){if(endOverlay){endOverlay.remove();endOverlay=null}layoutIndex=(layoutIndex+1)%MAZE_LAYOUTS.length;reset();running=true;last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
 function stop(){running=false;paused=false;cancelAnimationFrame(raf)}
 function togglePause(){if(!running)return;paused=!paused;screen.querySelector('#mazePause').textContent=paused?'Resume':'Pause';last=performance.now()}
 function loop(t){if(running&&!paused){const dt=Math.min(80,t-last);last=t;update(dt)}draw();if(running)raf=requestAnimationFrame(loop)}
