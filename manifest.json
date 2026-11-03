@@ -1,7 +1,7 @@
 {
   "name": "MadamGaming",
   "short_name": "MadamGaming",
-  "start_url": "./?app=1",
+  "start_url": "./?app=rainbow-n-2",
   "scope": "./",
   "display": "standalone",
   "background_color": "#101814",
@@ -9,16 +9,16 @@
   "description": "A little collection of offline games.",
   "icons": [
     {
-      "src": "icons/madamgaming-icon-192.png?v=1",
+      "src": "icons/rainbow-n.png?v=3",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "icons/madamgaming-icon-512.png?v=1",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "src": "icons/rainbow-n.svg?v=3",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
