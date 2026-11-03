@@ -23,6 +23,8 @@ screen.querySelector('#mazeChange').onclick=showPicks;
 screen.querySelectorAll('.maze-level').forEach(b=>b.onclick=()=>{difficulty=b.dataset.level;localStorage.setItem('mazeMunchDifficulty',difficulty);screen.querySelectorAll('.maze-level').forEach(x=>x.classList.toggle('selected',x===b))});
 screen.querySelector('#mazeStart').onclick=start;screen.querySelector('#mazePause').onclick=togglePause;screen.querySelector('#mazeBack').onclick=()=>{stop();showOnly('home')};
 canvas.addEventListener('touchstart',e=>{canvas._touch=e.changedTouches[0];e.preventDefault()},{passive:false});canvas.addEventListener('touchend',e=>{const a=canvas._touch,b=e.changedTouches[0];if(!a)return;const dx=b.clientX-a.clientX,dy=b.clientY-a.clientY;if(Math.max(Math.abs(dx),Math.abs(dy))>16)setDir(Math.abs(dx)>Math.abs(dy)?(dx>0?1:3):(dy>0?2:0));canvas._touch=null;e.preventDefault()},{passive:false});
+// Keep the saved friend selected, but collapse the picker on every fresh game entry.
+hidePicks();
 }
 function reset(){dots=new Set();map.forEach((r,y)=>[...r].forEach((v,x)=>{if(v==='.')dots.add(y+','+x)}));player={x:1,y:1};ghosts=[{x:19,y:1,d:3,char:'pumpkin'},{x:19,y:19,d:2,char:'bat'},{x:1,y:19,d:0,char:'skull'}];score=0;lives=3;dir=nextDir=1;running=false;paused=false;playerClock=ghostClock=0;shield=0;hud();const pause=screen&&screen.querySelector('#mazePause');if(pause)pause.textContent='Pause'}
 function start(){if(endOverlay){endOverlay.remove();endOverlay=null}reset();running=true;last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
