@@ -1,7 +1,8 @@
 {
+  "id": "./",
   "name": "MadamGaming",
   "short_name": "MadamGaming",
-  "start_url": "./?app=rainbow-n-2",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#101814",
