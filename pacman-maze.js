@@ -6,7 +6,7 @@ const MAZE_LAYOUTS=[
 { name:'Little Explorer',walls:[['v',4,3,8,[6]],['v',8,12,17,[14]],['v',13,3,8,[5]],['v',17,12,17,[15]],['h',5,4,9,[7]],['h',9,11,16,[13]],['h',15,4,9,[6]]] },
 { name:'Maze Adventure',walls:[['v',4,3,9,[6]],['v',7,11,17,[14]],['v',10,3,8,[5]],['v',13,12,17,[15]],['v',16,3,9,[7]],['h',5,4,9,[6]],['h',8,11,16,[13]],['h',12,4,9,[7]],['h',15,11,16,[14]],['h',18,5,15,[10]]] }
 ];
-let layoutIndex=0;
+let layoutIndex=2;
 let map=buildMaze(0);
 function buildMaze(index){
  const grid=Array.from({length:21},(_,y)=>Array.from({length:21},(_,x)=>(x===0||y===0||x===20||y===20)?'#':'.'));
