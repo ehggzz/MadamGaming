@@ -15,15 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install ImageMagick
+      - name: Install SVG renderer
         run: |
           sudo apt-get update
-          sudo apt-get install -y imagemagick
-      - name: Build app icons from the single source artwork
+          sudo apt-get install -y librsvg2-bin
+      - name: Build final MadamGaming PNG icons
         run: |
-          magick -background none icons/rainbow-n.svg -resize 180x180 icons/madamgaming-icon-180.png
-          magick -background none icons/rainbow-n.svg -resize 192x192 icons/madamgaming-icon-192.png
-          magick -background none icons/rainbow-n.svg -resize 512x512 icons/madamgaming-icon-512.png
+          rsvg-convert -w 180 -h 180 icons/rainbow-n.svg -o icons/madamgaming-icon-180.png
+          rsvg-convert -w 192 -h 192 icons/rainbow-n.svg -o icons/madamgaming-icon-192.png
+          rsvg-convert -w 512 -h 512 icons/rainbow-n.svg -o icons/madamgaming-icon-512.png
       - name: Commit generated PNG icons
         run: |
           git config user.name "github-actions[bot]"
@@ -31,5 +31,3 @@ jobs:
           git add icons/madamgaming-icon-180.png icons/madamgaming-icon-192.png icons/madamgaming-icon-512.png
           git diff --cached --quiet || git commit -m "Build final MadamGaming app icons"
           git push
-
-# The SVG is the source of truth; PNG sizes are rebuilt automatically on GitHub.
